@@ -1,6 +1,8 @@
+// Importamos la conexión a la base de datos
 const db = require('../config_db/database');
 
-// Funcion de crear el objeto finca
+
+// Función para insertar un nuevo registro en la tabla 'finca'
 const insertarFinca = (nombre, area, origen, fk_persona, fk_dron, callback) => {
   db.query(
     'INSERT INTO finca (nombre, area, origen, fk_persona, fk_dron) VALUES (?, ?, ?, ?, ?)',
@@ -13,7 +15,7 @@ const insertarFinca = (nombre, area, origen, fk_persona, fk_dron, callback) => {
 };
 
 
-// Funcion de crear el objeto trabajo
+// Función para insertar un nuevo registro en la tabla 'trabajo'
 const insertarTrabajo = (fecha_inicio, fecha_final, origen, fk_finca, fk_factura, callback) => {
   db.query(
     'INSERT INTO trabajo (fecha_inicio, fecha_final, origen, fk_finca, fk_factura) VALUES (?, ?, ?, ?, ?)',
@@ -26,7 +28,7 @@ const insertarTrabajo = (fecha_inicio, fecha_final, origen, fk_finca, fk_factura
 };
 
 
-// Funcion de crear el objeto persona
+// Función para insertar una nueva persona en la tabla 'personas'
 const insertarPersona = (nombres, apellidos, origen, callback) => {
   db.query(
     'INSERT INTO personas (nombres, apellidos, origen) VALUES (?, ?, ?)',
@@ -39,7 +41,7 @@ const insertarPersona = (nombres, apellidos, origen, callback) => {
 };
 
 
-// Funcion de crear el objeto dron
+// Función para insertar un nuevo dron en la tabla 'dron'
 const insertarDron = (nombre, origen, callback) => {
   db.query(
     'INSERT INTO dron (nombre, origen) VALUES (?, ?)',
@@ -52,7 +54,7 @@ const insertarDron = (nombre, origen, callback) => {
 };
 
 
-// Funcion de crear el objeto factura 
+// Función para insertar una nueva factura en la tabla 'factura'
 const insertarFactura = (corte_facturacion, precio, total_factura, codigo_factura, origen, callback) => {
   db.query(
     'INSERT INTO factura (corte_facturacion, precio, total_factura, codigo_factura, origen) VALUES (?, ?, ?, ?, ?)',
@@ -65,7 +67,7 @@ const insertarFactura = (corte_facturacion, precio, total_factura, codigo_factur
 };
 
 
-// Funcion de crear el objeto avance
+// Función para insertar un nuevo avance en la tabla 'avance'
 const insertarAvance = (mes, origen, fk_trabajo, callback) => {
   db.query(
     'INSERT INTO avance (mes, origen, fk_trabajo) VALUES (?, ?, ?)',
@@ -80,7 +82,9 @@ const insertarAvance = (mes, origen, fk_trabajo, callback) => {
 
 
 /*Se crea la funcion "ObtenerProgramaciones" que esta compuesta de una query que hace un llamado a la base de datos 
-para obtener todos los datos de las entidades cuyo valor en el dato origen se igual a formulario2*/
+para obtener todos los datos de las entidades cuyo valor en el dato origen sea igual a formulario2*/
+
+// Función para obtener todas las programaciones del formulario2
 const obtenerProgramaciones = (callback) => {
   db.query(`
     SELECT 
@@ -108,7 +112,11 @@ const obtenerProgramaciones = (callback) => {
   });
 };
 
-// Funcion de actualizar el objeto finca
+
+
+// Funciones de actualización para cada entidad
+
+
 const actualizarFinca = (id, nombre, area, origen, fk_persona, fk_dron, callback) => {
   db.query(
     'UPDATE finca SET nombre = ?, area = ?, origen=?, fk_persona = ?, fk_dron = ? WHERE id = ?',
@@ -121,7 +129,7 @@ const actualizarFinca = (id, nombre, area, origen, fk_persona, fk_dron, callback
 };
 
 
-// Funcion de actualizar el objeto trabajo
+
 const actualizarTrabajo = (id, fecha_inicio, fecha_final, origen, fk_finca, fk_factura, callback) => {
   db.query(
     'UPDATE trabajo SET fecha_inicio = ?, fecha_final = ?, origen = ? , fk_finca = ?, fk_factura = ? WHERE id = ?',
@@ -133,7 +141,7 @@ const actualizarTrabajo = (id, fecha_inicio, fecha_final, origen, fk_finca, fk_f
   );
 };
 
-// Funcion de actualizar el objeto persona
+
 const actualizarPersona = (id, nombres, apellidos, origen, callback) => {
   db.query(
     'UPDATE personas SET nombres = ?, apellidos = ?, origen = ? WHERE id = ?',
@@ -145,7 +153,7 @@ const actualizarPersona = (id, nombres, apellidos, origen, callback) => {
   );
 };
 
-// Funcion de actualizar el objeto dron
+
 const actualizarDron = (id, nombre, origen, callback) => {
   db.query(
     'UPDATE dron SET nombre = ?, origen = ? WHERE id = ?',
@@ -158,7 +166,7 @@ const actualizarDron = (id, nombre, origen, callback) => {
 };
 
 
-// Funcion de actualizar el objeto factura
+
 const actualizarFactura = (id, corte_facturacion, precio, total_factura, codigo_factura, origen, callback) => {
   console.log("📋 Valores recibidos:", { id, corte_facturacion, precio, total_factura, origen });
   db.query(
@@ -171,7 +179,7 @@ const actualizarFactura = (id, corte_facturacion, precio, total_factura, codigo_
   );
 };
 
-// Funcion de actualizar el objeto avance
+
 const actualizarAvance = (id, mes, fk_trabajo, origen, callback) => {
   db.query(
     'UPDATE avance SET mes = ?, fk_trabajo = ?, origen = ? WHERE id = ?',
@@ -188,6 +196,8 @@ const actualizarAvance = (id, mes, fk_trabajo, origen, callback) => {
 /* Se crea la funcion "eliminarProgramcion" con el fin de eliminar una programacion completa,
 que incluye finca, trabajos, avances, facturas,dron y persona,
 asegurando que se eliminen todas las relaciones y datos asociados. */
+
+// Función que elimina una programación completa (finca + relaciones)
 const eliminarProgramacion = (id, callback) => {
   const obtenerIDs = `SELECT fk_dron, fk_persona FROM finca WHERE id = ? AND origen = 'formulario2'`;
 
@@ -259,7 +269,7 @@ const eliminarProgramacion = (id, callback) => {
 
 
 
-
+// Exportamos todas las funciones para ser usadas desde el controlador
 module.exports = {
   insertarFinca,
   insertarTrabajo,

@@ -1,5 +1,8 @@
+// Importamos Express para definir rutas HTTP
 const express = require('express');
+// Creamos un router de Express para definir las rutas
 const router = express.Router();
+// Importamos las funciones de programacion_controllers
 const programacionController = require('../controladores/programacion_controller');
 
 // Rutas para crear

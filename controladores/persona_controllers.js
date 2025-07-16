@@ -1,24 +1,7 @@
+// Importamos el persona_modelo que contiene las consultas SQL para la tabla 'personas'
 const Persona = require('../modelos/persona_modelo');
 
-const getAllPersonas = (req, res) => {
-    Persona.getAll((err, results) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.json(results);
-    });
-};
-
-const getPersonaById = (req, res) => {
-    const id = req.params.id;
-    Persona.getById(id, (err, results) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.json(results[0]);
-    });
-};
-
+// Controlador para crear una nueva persona
 const createPersona = (req, res) => {
     const { nombres, apellidos, origen } = req.body;
     Persona.create({ nombres, apellidos, origen }, (err, results) => {
@@ -29,39 +12,25 @@ const createPersona = (req, res) => {
     });
 };
 
+
+// Controlador para actualizar una persona existente por su ID
 const updatePersona = (req, res) => {
     const id = req.params.id;
-    const { nombres, apellidos} = req.body;
-
-    console.log("Datos recibidos en la API:", { id, nombres, apellidos}); // 🛠️ Debugging
-
+    const { nombres, apellidos, origen} = req.body;
+    console.log("Datos recibidos en la API:", { id, nombres, apellidos, origen}); // 🛠️ Debugging
     if (!nombres) {
         return res.status(400).json({ error: "El campo 'nombres' es obligatorio" });
     }
-
-    Persona.update(id, { nombres, apellidos}, (err, results) => {
+    Persona.update(id, { nombres, apellidos, origen}, (err, results) => {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
-        res.json({ id, nombres, apellidos});
+        res.json({ id, nombres, apellidos, origen});
     });
 };
 
-
-const deletePersona = (req, res) => {
-    const id = req.params.id;
-    Persona.delete(id, (err, results) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.status(204).send();
-    });
-};
-
+// Exportamos las funciones para ser utilizadas en las rutas
 module.exports = {
-    getAllPersonas,
-    getPersonaById,
     createPersona,
-    updatePersona,
-    deletePersona
+    updatePersona
 };

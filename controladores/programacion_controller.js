@@ -1,6 +1,7 @@
+// Importamos el modelo que contiene las operacions CRUD 
 const programacionModelo = require('../modelos/programacion_modelo');
 
-// Crear
+// Controladores de creación para cada entidad
 const crearFinca = (req, res) => {
   const { nombre, area, origen, fk_persona, fk_dron } = req.body;
   programacionModelo.insertarFinca(nombre, area, origen, fk_persona, fk_dron, (error, id) => {
@@ -66,7 +67,8 @@ const crearAvance = (req, res) => {
     res.status(201).json({ id });
   });
 };
-// Leer
+
+// Controlador para obtener todas las programaciones del formulario2
 const obtenerProgramaciones = (req, res) => {
   programacionModelo.obtenerProgramaciones((error, rows) => {
     if (error) {
@@ -124,7 +126,7 @@ const obtenerProgramaciones = (req, res) => {
 };
 
 
-// Actualizar
+// Controladores de actualización para cada entidad
 const actualizarFinca = (req, res) => {
   const id = req.params.id;
   const { nombre, area, origen, fk_persona, fk_dron } = req.body;
@@ -197,7 +199,7 @@ const actualizarAvance = (req, res) => {
   });
 };
 
-// Eliminar
+// Controlador que elimina una programación completa (finca + relaciones)
 const eliminarProgramacion = (req, res) => {
   const { id } = req.params;
   programacionModelo.eliminarProgramacion(id, (error) => {
@@ -209,6 +211,8 @@ const eliminarProgramacion = (req, res) => {
   });
 };
 
+
+// Exportamos las funciones para ser utilizadas en las rutas
 module.exports = {
   crearFinca,
   crearTrabajo,
